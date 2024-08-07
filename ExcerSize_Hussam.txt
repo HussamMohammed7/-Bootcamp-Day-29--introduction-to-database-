@@ -1,0 +1,76 @@
+create database store;
+
+                  create table countries (
+                           code int primary key,
+                           name varchar(20) unique,
+                           continent_name varchar(20) not null
+                            );
+
+                    create table users (
+                    id int primary key,
+                    full_name varchar(20),
+                    email varchar(20) unique,
+                    gender char(1)
+                        check ( gender = 'm' or gender = 'f'),
+                    date_of_birth varchar(15),
+                    created_at datetime DEFAULT CURRENT_TIMESTAMP,
+                    country_code int,
+                    foreign key (country_code) references countries(code)
+                       );
+
+                 create table orders (
+                     id int primary key,
+                     user_id int,
+                     foreign key (user_id) references users(id),
+                     status varchar(6) check ( status = 'start' or status = 'finished'
+                         ),
+                     created_at datetime default CURRENT_TIMESTAMP
+                     );
+
+create table order_products (
+                                order_id int,
+                                foreign key (order_id) references orders(id),
+                                product_id int,
+                                foreign key (product_id) references products(id),
+
+                                quantity int default 0
+);
+
+create table products (
+                          id int primary key,
+                          name varchar(10) NOT NULL ,
+                          price int default 0,
+                          status varchar(10) check ( status = 'valid' or status = 'expired' ),
+                          created_at
+                              datetime DEFAULT CURRENT_TIME
+
+);
+
+
+insert into countries values (966, 'Saudi Arabia', 'Middle East');
+
+
+
+INSERT INTO users (id, full_name, email, gender, date_of_birth, created_at, country_code)
+VALUES (1, 'Hussam ', 'hussam@gmail.com', 'm', '2000/10/29',now(), 966);
+
+insert into orders values (1, 1,'start', NOW());
+
+insert into order_products values (1, 1, 500);
+
+insert into products values (1, 'Smart watch', 1499, 'valid', now());
+
+
+update countries set name = 'Oman' where code = '966';
+
+delete from products where id = 2;
+
+SELECT * FROM countries;
+
+SELECT * FROM users;
+
+SELECT * FROM orders;
+
+SELECT * FROM order_products;
+
+SELECT * FROM products;
